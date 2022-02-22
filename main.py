@@ -1,14 +1,12 @@
 import configparser
 import json
-import csv
 from telethon import TelegramClient, connection
 # для корректного переноса времени сообщений в json
 from datetime import date, datetime
 # класс для работы с сообщениями
 from telethon.tl.functions.messages import GetHistoryRequest
 import pandas as pd
-import xlsxwriter
-import xlwt
+
 # Считываем учетные данные
 config = configparser.ConfigParser()
 config.read("config.ini")
