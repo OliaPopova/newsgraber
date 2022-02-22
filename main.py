@@ -20,7 +20,7 @@ client = TelegramClient(
 
 client.start()
 
-async def dump_all_messages(channel):
+async def dump_all_messages(channel, url):
 
     offset_msg = 0  # номер записи, с которой начинается считывание
     limit_msg = 100  # максимальное число записей, передаваемых за один раз
@@ -51,11 +51,13 @@ async def dump_all_messages(channel):
             break
         messages = history.messages
 
+
         try:
             for message in messages:
-                all_messages.append(message.to_dict()['message'])
-                all_datas.append(message.to_dict()['date'])
-                all_all.append(message.to_dict())
+                if message.to_dict()['message'] != "":
+                    all_messages.append(message.to_dict()['message'])
+                    all_datas.append(message.to_dict()['date'])
+                    all_all.append(message.to_dict())
         except:
             print('ошибка')
         else:
@@ -74,7 +76,8 @@ async def dump_all_messages(channel):
     # формирование exel файла
     di = {
         "новости": all_messages,
-        "дата": all_datas
+        "дата": all_datas,
+        "канал" : url
     }
     z = pd.DataFrame(di)
     z['дата'] = all_datas
@@ -86,9 +89,7 @@ async def main():
     url = input("Введите ссылку на канал или чат: ")
     channel = await client.get_entity(url)
 
-    await dump_all_messages(channel)
-
-
+    await dump_all_messages(channel,url)
 
 with client:
     client.loop.run_until_complete(main())
