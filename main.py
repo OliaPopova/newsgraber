@@ -21,7 +21,12 @@ client = TelegramClient(
 client.start()
 
 async def dump_all_messages(channel, url):
-
+    if url== 'https://t.me/trueresearch':
+        channel_name = 'Русский research'
+    if url== 'https://t.me/katorga_sci':
+        channel_name = 'Научная каторга'
+    if url== 'https://t.me/scienpolicy':
+        channel_name = 'Научно-образовательная политика'
     offset_msg = 0  # номер записи, с которой начинается считывание
     limit_msg = 100  # максимальное число записей, передаваемых за один раз
 
@@ -29,7 +34,7 @@ async def dump_all_messages(channel, url):
     all_datas = []  # список всех дат
     all_all = []
     total_messages = 0
-    total_count_limit = 50  # поменяйте это значение, если вам нужны не все сообщения
+    total_count_limit = 0  # поменяйте это значение, если вам нужны не все сообщения
 
     class DateTimeEncoder(json.JSONEncoder):
 
@@ -77,12 +82,12 @@ async def dump_all_messages(channel, url):
     di = {
         "новости": all_messages,
         "дата": all_datas,
-        "канал" : url
+        "канал" : channel_name
     }
     z = pd.DataFrame(di)
     z['дата'] = all_datas
     z['дата'] = z['дата'].apply(lambda a: pd.to_datetime(a).date())
-    z.to_excel("file_name.xlsx", index=False)
+    z.to_excel("data.xlsx", index=False)
 
 
 async def main():
